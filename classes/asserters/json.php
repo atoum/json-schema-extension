@@ -1,0 +1,118 @@
+<?php
+
+namespace mageekguy\atoum\jsonSchema\asserters;
+
+use JsonSchema;
+use JsonSchema\Exception;
+use mageekguy\atoum\asserter;
+use mageekguy\atoum\asserters;
+use mageekguy\atoum\exceptions;
+use mageekguy\atoum\jsonSchema\retriever;
+
+class json extends asserters\string
+{
+	protected $innerAsserter;
+	protected $data;
+
+	function __get($name)
+	{
+		return $this->valueIsSet()->innerAsserter->$name;
+	}
+
+	public function __call($method, $arguments)
+	{
+		return call_user_func_array(array($this->valueIsSet()->innerAsserter, $method), $arguments);
+	}
+
+	public function setWith($value, $label = null, $charlist = null, $checkType = true)
+	{
+		parent::setWith($value, $label, $charlist, $checkType);
+
+		if (self::isJson($value) === false)
+		{
+			$this->fail(sprintf($this->getLocale()->_('%s is not a valid JSON string'), $this));
+		}
+
+		$this->data = json_decode($value);
+
+		if (is_array($this->data) === true)
+		{
+			$this->innerAsserter = new asserters\phpArray($this->getGenerator());
+		}
+		else
+		{
+			$this->innerAsserter = new asserters\object($this->getGenerator());
+		}
+
+		$this->innerAsserter->setWith($this->data);
+
+		return $this;
+	}
+
+	public function validates($schema)
+	{
+		$schemaIsFile = true;
+		$referencesRoot = null;
+		$retriever = new JsonSchema\Uri\UriRetriever();
+
+		if (is_file($schema) === false)
+		{
+
+			$retriever->setUriRetriever(new retriever($schema));
+			$schemaIsFile = false;
+		}
+		else
+		{
+			$referencesRoot = dirname($schema);
+		}
+
+		try
+		{
+			$schema = $retriever->retrieve($schemaIsFile ? $schema : '/dev/null');
+		}
+		catch(Exception\JsonDecodingException $exception)
+		{
+			throw new exceptions\logic\invalidArgument('Invalid JSON schema');
+		}
+
+		if ($schemaIsFile === true)
+		{
+			$resolver = new JsonSchema\RefResolver($retriever);
+			$resolver->resolve($schema, 'file://' . $referencesRoot);
+		}
+
+		$validator = new JsonSchema\Validator();
+		$validator->check($this->valueIsSet()->data, $schema);
+
+		if ($validator->isValid() === true)
+		{
+			$this->pass();
+		}
+		else
+		{
+			$violations = $validator->getErrors();
+			$count = sizeof($violations);
+			$message = sprintf($this->getLocale()->__('JSON does not validate schema. Found %d violation:', 'JSON does not validate schema. Found %d violations:', $count), $count);
+
+			foreach ($validator->getErrors() as $index => $error)
+			{
+				$message .= PHP_EOL . sprintf('[%d] %s: %s', $index + 1, $error['property'], $error['message']);
+			}
+
+			$this->fail($message);
+		}
+
+		return $this;
+	}
+
+
+	protected function valueIsSet($message = 'JSON is undefined')
+	{
+		return parent::valueIsSet($message);
+	}
+
+	protected static function isJson($value)
+	{
+		return (@json_decode($value) !== null);
+	}
+} 
