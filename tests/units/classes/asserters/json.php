@@ -87,6 +87,6 @@ class json extends atoum\test
 
 	protected function testValidatesJsonArrayGrammarDataProvider()
 	{
-		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'), 2);
+		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'));
 	}
 }
