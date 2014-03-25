@@ -70,10 +70,12 @@ class json extends atoum\test
 	{
 		$sampler = $this->getJsonSampler();
 
-		reset($sampler);
-		next($sampler);
+		foreach($sampler as $i => $data)
+		{
+			return $data;
+		}
 
-		return current($sampler);
+		return null;
 	}
 
 	protected function getJsonSampler()
@@ -81,7 +83,7 @@ class json extends atoum\test
 		return new \Hoa\Compiler\Llk\Sampler\BoundedExhaustive(
 			\Hoa\Compiler\Llk\Llk::load(new \Hoa\File\Read(__DIR__ . '/../../../resources/json.pp')),
 			new \Hoa\Regex\Visitor\Isotropic(new \Hoa\Math\Sampler\Random()),
-			1
+			15
 		);
 	}
 }
