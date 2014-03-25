@@ -32,8 +32,22 @@ class json extends atoum\test
 				)
 					->isInstanceOf('mageekguy\atoum\asserter\exception')
 					->hasMessage(sprintf('%s is not a valid JSON string', $asserter->getTypeOf($value)))
-				->object($asserter->setWith(json_encode(array())))->isIdenticalTo($asserter)
 		;
+	}
+
+	public function testSetWithJsonGrammar($json)
+	{
+		$this
+			->assert($json)
+			->if($asserter = new testedClass())
+			->then
+				->object($asserter->setWith($json))->isIdenticalTo($asserter)
+		;
+	}
+
+	protected function testSetWithJsonGrammarDataProvider()
+	{
+		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json.pp'));
 	}
 
 	public function testValidates()
@@ -57,33 +71,22 @@ class json extends atoum\test
 				)
 					->isInstanceOf('mageekguy\atoum\exceptions\logic')
 					->hasMessage('JSON is undefined')
-			->given(
-				$json = $this->getJsonData()
-			)
-			->if($asserter->setWith($json))
+		;
+	}
+
+	public function testValidatesJsonArrayGrammar($json)
+	{
+		$this
+			->assert($json)
+			->if($asserter = new testedClass())
 			->then
+				->object($asserter->setWith($json))->isIdenticalTo($asserter)
 				->object($asserter->validates('{"title": "test", "type": "array"}'))->isIdenticalTo($asserter)
 		;
 	}
 
-	protected function getJsonData()
+	protected function testValidatesJsonArrayGrammarDataProvider()
 	{
-		$sampler = $this->getJsonSampler();
-
-		foreach($sampler as $i => $data)
-		{
-			return $data;
-		}
-
-		return null;
-	}
-
-	protected function getJsonSampler()
-	{
-		return new \Hoa\Compiler\Llk\Sampler\BoundedExhaustive(
-			\Hoa\Compiler\Llk\Llk::load(new \Hoa\File\Read(__DIR__ . '/../../../resources/json.pp')),
-			new \Hoa\Regex\Visitor\Isotropic(new \Hoa\Math\Sampler\Random()),
-			15
-		);
+		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'), 2);
 	}
 }

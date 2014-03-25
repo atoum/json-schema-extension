@@ -35,13 +35,18 @@ class json extends asserters\string
 
 		$this->data = json_decode($value);
 
-		if (is_array($this->data) === true)
+		switch (true)
 		{
-			$this->innerAsserter = new asserters\phpArray($this->getGenerator());
-		}
-		else
-		{
-			$this->innerAsserter = new asserters\object($this->getGenerator());
+			case is_array($this->data):
+				$this->innerAsserter = new asserters\phpArray($this->getGenerator());
+				break;
+
+			case is_object($this->data):
+				$this->innerAsserter = new asserters\object($this->getGenerator());
+				break;
+
+			default:
+				$this->innerAsserter = new asserters\variable($this->getGenerator());
 		}
 
 		$this->innerAsserter->setWith($this->data);
@@ -113,6 +118,11 @@ class json extends asserters\string
 
 	protected static function isJson($value)
 	{
-		return (@json_decode($value) !== null);
+		$decoded = @json_decode($value);
+
+		return (
+			error_get_last() === null &&
+			($decoded !== null || strtolower(trim($value)) === 'null')
+		);
 	}
 } 
