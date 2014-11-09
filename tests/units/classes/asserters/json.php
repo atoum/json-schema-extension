@@ -31,7 +31,7 @@ class json extends atoum\test
 					}
 				)
 					->isInstanceOf('mageekguy\atoum\asserter\exception')
-					->hasMessage(sprintf('%s is not a valid JSON string', $asserter->getTypeOf($value)))
+					->hasMessage(sprintf('%s is not a valid JSON string', $asserter))
 		;
 	}
 
@@ -89,4 +89,23 @@ class json extends atoum\test
 	{
 		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'));
 	}
+
+    public function testNotValidatesJsonArrayGrammar($json)
+    {
+        $this
+            ->assert($json)
+            ->if($asserter = new testedClass())
+            ->then
+                ->object($asserter->setWith($json))->isIdenticalTo($asserter)
+                ->exception(function() use ($asserter) {
+                        $asserter->validates('{"title": "test", "type": "array"}');
+                    }
+                )
+        ;
+    }
+
+    protected function testNotValidatesJsonArrayGrammarDataProvider()
+    {
+        return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/noarray.pp'));
+    }
 }
