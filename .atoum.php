@@ -4,16 +4,11 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'a
 
 use
 	mageekguy\atoum\jsonSchema,
-	Atoum\PraspelExtension,
-	mageekguy\atoum\instrumentation\stream\cache
+	Atoum\PraspelExtension
 ;
 
-cache::setCacheDirectory('/tmp');
 
 $runner
-	->disableXDebugCodeCoverage()
-	->enableInstrumentation()
-		->disableMoleInstrumentation()
 	->addExtension(new jsonSchema\extension($script))
 	->addExtension(new PraspelExtension\Manifest())
 ;

@@ -11,36 +11,16 @@
             "email": "contact@jubianchi.fr"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/jubianchi/atoum"
-        }
-    ],
     "require": {
+        "atoum/atoum": "dev-extension",
         "justinrainbow/json-schema": "*"
     },
     "require-dev": {
-        "atoum/atoum": "dev-experimentation",
-        "atoum/praspel-extension": "*@dev",
-            "hoa/core": "*@dev",
-            "hoa/praspel": "*@dev",
-            "hoa/console": "*@dev",
-            "hoa/dispatcher": "*@dev",
-            "hoa/math": "*@dev",
-            "hoa/compiler": "*@dev",
-            "hoa/string": "*@dev",
-            "hoa/realdom": "*@dev",
-            "hoa/file": "*@dev",
-            "hoa/stream": "*@dev",
-            "hoa/iterator": "*@dev",
-            "hoa/visitor": "*@dev",
-            "hoa/regex": "*@dev",
-            "hoa/router": "*@dev"
+        "atoum/praspel-extension": "~0"
     },
     "autoload": {
         "psr-4": {
-            "mageekguy\\atoum\\faker\\": "classes"
+            "mageekguy\\atoum\\jsonSchema\\": "classes"
         },
         "files": ["autoloader.php"]
     }
