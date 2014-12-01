@@ -90,22 +90,22 @@ class json extends atoum\test
 		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'));
 	}
 
-    public function testNotValidatesJsonArrayGrammar($json)
-    {
-        $this
-            ->assert($json)
-            ->if($asserter = new testedClass())
-            ->then
-                ->object($asserter->setWith($json))->isIdenticalTo($asserter)
-                ->exception(function() use ($asserter) {
-                        $asserter->validates('{"title": "test", "type": "array"}');
-                    }
-                )
-        ;
-    }
+	public function testNotValidatesJsonArrayGrammar($json)
+	{
+		$this
+			->assert($json)
+			->if($asserter = new testedClass())
+			->then
+				->object($asserter->setWith($json))->isIdenticalTo($asserter)
+				->exception(function() use ($asserter) {
+						$asserter->validates('{"title": "test", "type": "array"}');
+					}
+				)
+		;
+	}
 
-    protected function testNotValidatesJsonArrayGrammarDataProvider()
-    {
-        return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/noarray.pp'));
-    }
+	protected function testNotValidatesJsonArrayGrammarDataProvider()
+	{
+		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/noarray.pp'));
+	}
 }
