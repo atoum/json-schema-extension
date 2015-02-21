@@ -13,11 +13,10 @@ matrix:
     - php: hhvm-nightly
 
 notifications:
-  irc: "irc.freenode.org#jubianchifr"
+  irc: "irc.freenode.org##atoum"
 
 before_script:
   - composer install
 
 script:
   - vendor/bin/atoum --test-ext
-

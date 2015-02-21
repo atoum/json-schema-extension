@@ -47,7 +47,17 @@ class json extends atoum\test
 
 	protected function testSetWithJsonGrammarDataProvider()
 	{
-		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json.pp'));
+		$parser = \Hoa\Compiler\Llk\Llk::load(new \Hoa\File\Read(__DIR__ . '/../../../resources/json.pp'));
+		$visitor = new \Hoa\Regex\Visitor\Isotropic(new \Hoa\Math\Sampler\Random());
+		$coverage = new \Hoa\Compiler\Llk\Sampler\Coverage($parser, $visitor);
+		$bound = new \Hoa\Compiler\Llk\Sampler\BoundedExhaustive($parser, $visitor);
+
+		return array_merge(
+			iterator_to_array($coverage),
+			iterator_to_array($bound)
+		);
+
+		//return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json.pp'));
 	}
 
 	public function testValidates()
