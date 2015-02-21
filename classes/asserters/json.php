@@ -4,7 +4,6 @@ namespace mageekguy\atoum\jsonSchema\asserters;
 
 use JsonSchema;
 use JsonSchema\Exception;
-use mageekguy\atoum\asserter;
 use mageekguy\atoum\asserters;
 use mageekguy\atoum\exceptions;
 use mageekguy\atoum\jsonSchema\retriever;
@@ -74,18 +73,15 @@ class json extends stringAsserter
 
 			$retriever->setUriRetriever(new retriever($schema));
 			$schemaIsFile = false;
+			$schema = @json_decode($schema);
 		}
 		else
 		{
 			$referencesRoot = dirname($schema);
+			$schema = $retriever->retrieve($schema);
 		}
 
-		try
-		{
-			$schema = $retriever->retrieve($schemaIsFile ? $schema : '/dev/null');
-		}
-		catch(Exception\JsonDecodingException $exception)
-		{
+		if ($schema === null) {
 			throw new exceptions\logic\invalidArgument('Invalid JSON schema');
 		}
 

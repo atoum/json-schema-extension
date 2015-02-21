@@ -1,22 +1,32 @@
 language: php
 
 php:
-  - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - nightly
   - hhvm
   - hhvm-nightly
 
+cache:
+  directories:
+    - vendor
+
+env:
+  matrix:
+    - COMPOSER_PREFER="--prefer-stable"
+    - COMPOSER_PREFER="--prefer-lowest"
+
 matrix:
   allow_failures:
+    - php: nightly
     - php: hhvm
     - php: hhvm-nightly
 
 notifications:
   irc: "irc.freenode.org##atoum"
 
-before_script:
-  - composer install
-
 script:
-  - vendor/bin/atoum --test-ext
+  - composer update $COMPOSER_PREFER
+  - vendor/bin/atoum --test-ext -p 'php -n -ddate.timezone=UTC'
+
