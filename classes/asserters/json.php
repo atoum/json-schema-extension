@@ -9,7 +9,16 @@ use mageekguy\atoum\asserters;
 use mageekguy\atoum\exceptions;
 use mageekguy\atoum\jsonSchema\retriever;
 
-class json extends asserters\string
+if (class_exists('mageekguy\atoum\asserters\phpString'))
+{
+	class stringAsserter extends asserters\phpString {}
+}
+else
+{
+	class stringAsserter extends asserters\string {}
+}
+
+class json extends stringAsserter
 {
 	protected $innerAsserter;
 	protected $data;
@@ -125,4 +134,4 @@ class json extends asserters\string
 			($decoded !== null || strtolower(trim($value)) === 'null')
 		);
 	}
-} 
+}
