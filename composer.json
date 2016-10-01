@@ -4,7 +4,7 @@
     "description": "JSON Schema extension for atoum, the simple modern and intuitive unit testing framework for PHP 5.3+",
     "keywords": ["TDD","atoum","test","unit testing","json"],
     "homepage": "http://www.atoum.org",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "jubianchi",
