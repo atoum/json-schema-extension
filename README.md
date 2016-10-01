@@ -59,3 +59,6 @@ class foo extends atoum\test
     }
 }
 ```
+
+## License
+atoum/json-schema-extension are released under the BSD-3-Clause License. See the bundled [LICENSE](LICENSE) file for details.
