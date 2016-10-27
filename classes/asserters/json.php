@@ -4,7 +4,6 @@ namespace mageekguy\atoum\jsonSchema\asserters;
 
 use JsonSchema;
 use JsonSchema\Exception;
-use mageekguy\atoum\asserter;
 use mageekguy\atoum\asserters;
 use mageekguy\atoum\exceptions;
 use mageekguy\atoum\jsonSchema\retriever;
@@ -127,7 +126,9 @@ class json extends stringAsserter
 
 	protected static function isJson($value)
 	{
-		$decoded = @json_decode($value);
+		$decoded = json_decode($value);
+
+        //var_dump(error_get_last(), $decoded, $value, strtolower(trim($value)));
 
 		return (
 			error_get_last() === null &&

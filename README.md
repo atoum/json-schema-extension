@@ -26,7 +26,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'a
 
 use mageekguy\atoum\jsonSchema;
 
-$runner->addExtension(new jsonSchema\extension($script));
+$extension = new jsonSchema\extension($script);
+
+$extension->addToRunner($runner);
 ```
 
 ## Use it
