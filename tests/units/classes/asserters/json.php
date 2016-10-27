@@ -11,9 +11,11 @@ class json extends atoum\test
 {
 	public function testClass()
 	{
+		$namespace = 'mageekguy\\atoum\\asserters';
+		$className = class_exists($namespace . '\\phpString') ? 'phpString' : 'string';
 		$this
 			->testedClass
-				->isSubClassOf('mageekguy\atoum\asserters\string')
+				->isSubClassOf($namespace . '\\' . $className)
 		;
 	}
 

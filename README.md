@@ -1,6 +1,6 @@
 # atoum/json-schema-extension [![Build Status](https://travis-ci.org/atoum/json-schema-extension.svg?branch=master)](https://travis-ci.org/atoum/json-schema-extension)
 
-![atoum](http://downloads.atoum.org/images/logo.png)
+![atoum](http://atoum.org/images/logo/atoum.png)
 
 ## Install it
 
@@ -61,3 +61,6 @@ class foo extends atoum\test
     }
 }
 ```
+
+## License
+json-schema-extension is released under the BSD-3-Clause License. See the bundled [LICENSE](LICENSE) file for details.
