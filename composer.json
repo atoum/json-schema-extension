@@ -2,7 +2,7 @@
     "name": "atoum/json-schema-extension",
     "type": "library",
     "description": "JSON Schema extension for atoum, the simple modern and intuitive unit testing framework for PHP 5.3+",
-    "keywords": ["TDD","atoum","test","unit testing","json","atoum-extension"],
+    "keywords": ["TDD", "atoum", "test", "unit testing", "json", "atoum-extension"],
     "homepage": "http://www.atoum.org",
     "license": "BSD-3-Clause",
     "authors": [
