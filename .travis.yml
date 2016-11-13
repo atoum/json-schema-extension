@@ -12,6 +12,8 @@ cache:
   directories:
     - vendor
 
+sudo: false
+
 env:
   matrix:
     - COMPOSER_PREFER="--prefer-stable"
