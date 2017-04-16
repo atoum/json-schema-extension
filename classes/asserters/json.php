@@ -38,7 +38,7 @@ class json extends stringAsserter
 
 		if (self::isJson($value) === false)
 		{
-			$this->fail(sprintf($this->getLocale()->_('%s is not a valid JSON string'), $this));
+			$this->fail(sprintf($this->getLocale()->_('%s is not a valid JSON string'), $value));
 		}
 
 		$this->data = json_decode($value);
