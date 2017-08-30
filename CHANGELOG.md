@@ -1,6 +1,8 @@
 # dev-master
 
-* Update dependencies, and test against PHP 7.1 ([@shouze])
+# 2.0 - 2017-08-30
+
+* Use atoum 3.0, update dependencies, and test against PHP 7.1 ([@shouze])
 * The extension is now autoloaded ([@jubianchi])
 * Fixed `json` asserter when last atoum versions ([@fferriere])
 * Add test autoloader
