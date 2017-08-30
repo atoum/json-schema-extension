@@ -1,5 +1,6 @@
 # dev-master
 
+* Update dependencies, and test against PHP 7.1 ([@shouze])
 * The extension is now autoloaded ([@jubianchi])
 * Fixed `json` asserter when last atoum versions ([@fferriere])
 * Add test autoloader
@@ -13,3 +14,4 @@
 
 [@fferriere]: https://github.com/fferriere
 [@jubianchi]: https://github.com/jubianchi
+[@shouze]: https://github.com/shouze
