@@ -13,15 +13,15 @@
     ],
     "minimum-stability": "beta",
     "require": {
-        "php": "^5.5.0 || ^7.0.0",
-        "atoum/atoum": "^2.9",
-        "justinrainbow/json-schema": "^1.4.0"
+        "php": "^5.6.0 || ^7.0.0",
+        "atoum/atoum": "^3.0",
+        "justinrainbow/json-schema": ">=3.0.0 <=6.0.0"
     },
     "require-dev": {
-        "atoum/praspel-extension": "^0.16",
+        "atoum/praspel-extension": "^0.16||^0.17",
         "hoa/praspel": "^1.16.01.14",
         "hoa/compiler": "^3.16.08.15",
-        "hoa/Iterator": "2.16.03.15"
+        "hoa/iterator": "^2.16.03.15"
     },
     "autoload": {
         "psr-4": {

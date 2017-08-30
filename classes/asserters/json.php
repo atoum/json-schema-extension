@@ -17,6 +17,15 @@ else
 	class stringAsserter extends asserters\string {}
 }
 
+if (class_exists('mageekguy\atoum\asserters\phpObject'))
+{
+	class objectAsserter extends asserters\phpObject {}
+}
+else
+{
+	class objectAsserter extends asserters\object {}
+}
+
 class json extends stringAsserter
 {
 	protected $innerAsserter;
@@ -50,7 +59,7 @@ class json extends stringAsserter
 				break;
 
 			case is_object($this->data):
-				$this->innerAsserter = new asserters\object($this->getGenerator());
+				$this->innerAsserter = new objectAsserter($this->getGenerator());
 				break;
 
 			default:
@@ -87,7 +96,7 @@ class json extends stringAsserter
 
 		if ($schemaIsFile === true)
 		{
-			$resolver = new JsonSchema\RefResolver($retriever);
+			$resolver = new JsonSchema\JsonStorage($retriever);
 			$resolver->resolve($schema, 'file://' . $referencesRoot);
 		}
 
