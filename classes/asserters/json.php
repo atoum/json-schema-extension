@@ -41,9 +41,9 @@ class json extends stringAsserter
 		return call_user_func_array(array($this->valueIsSet()->innerAsserter, $method), $arguments);
 	}
 
-	public function setWith($value, $label = null, $charlist = null, $checkType = true)
+	public function setWith($value, $charlist = null, $checkType = true)
 	{
-		parent::setWith($value, $label, $charlist, $checkType);
+		parent::setWith($value, $charlist, $checkType);
 
 		if (self::isJson($value) === false)
 		{

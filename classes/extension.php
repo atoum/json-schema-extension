@@ -45,13 +45,13 @@ class extension implements atoum\extension
 		$test->getAssertionManager()
 			->setHandler(
 				'json',
-				function($json, $depth = null, $options = null) use ($test, & $asserter) {
+				function($json, $charlist = null, $checkType = true) use ($test, & $asserter) {
 					if ($asserter === null)
 					{
 						$asserter = new atoum\jsonSchema\asserters\json($test->getAsserterGenerator());
 					}
 
-					return $asserter->setWith($json, $depth, $options);
+					return $asserter->setWith($json, $charlist, $checkType);
 				}
 			)
 		;
