@@ -51,6 +51,7 @@ class extension implements atoum\extension
 						$asserter = new atoum\jsonSchema\asserters\json($test->getAsserterGenerator());
 					}
 
+					$asserter->setWithTest($test);
 					return $asserter->setWith($json, $charlist, $checkType);
 				}
 			)
