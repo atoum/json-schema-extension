@@ -73,35 +73,17 @@ class json extends stringAsserter
 
 	public function validates($schema)
 	{
-		$schemaIsFile = true;
-		$referencesRoot = null;
-		$retriever = new JsonSchema\Uri\UriRetriever();
-
-		if (is_file($schema) === false)
-		{
-
-			$retriever->setUriRetriever(new retriever($schema));
-			$schemaIsFile = false;
-			$schema = @json_decode($schema);
+		if (is_file($schema) === true) {
+			$schemaObject = (object)['$ref' => 'file://' . realpath($schema)];
+		} else {
+			$schemaObject = @json_decode($schema);
+			if ($schemaObject === null)
+			{
+            	throw new exceptions\logic\invalidArgument('Invalid JSON schema');
+        	}
 		}
-		else
-		{
-			$referencesRoot = dirname($schema);
-			$schema = $retriever->retrieve($schema);
-		}
-
-		if ($schema === null) {
-			throw new exceptions\logic\invalidArgument('Invalid JSON schema');
-		}
-
-		if ($schemaIsFile === true)
-		{
-			$resolver = new JsonSchema\JsonStorage($retriever);
-			$resolver->resolve($schema, 'file://' . $referencesRoot);
-		}
-
 		$validator = new JsonSchema\Validator();
-		$validator->check($this->valueIsSet()->data, $schema);
+		$validator->check($this->valueIsSet()->data, $schemaObject);
 
 		if ($validator->isValid() === true)
 		{
@@ -123,7 +105,6 @@ class json extends stringAsserter
 
 		return $this;
 	}
-
 
 	protected function valueIsSet($message = 'JSON is undefined')
 	{
