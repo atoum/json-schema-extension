@@ -3,10 +3,8 @@
 namespace mageekguy\atoum\jsonSchema\asserters;
 
 use JsonSchema;
-use JsonSchema\Exception;
 use mageekguy\atoum\asserters;
 use mageekguy\atoum\exceptions;
-use mageekguy\atoum\jsonSchema\retriever;
 
 if (class_exists('mageekguy\atoum\asserters\phpString'))
 {
@@ -73,15 +71,7 @@ class json extends stringAsserter
 
 	public function validates($schema)
 	{
-		if (is_file($schema) === true) {
-			$schemaObject = (object)['$ref' => 'file://' . realpath($schema)];
-		} else {
-			$schemaObject = @json_decode($schema);
-			if ($schemaObject === null)
-			{
-            	throw new exceptions\logic\invalidArgument('Invalid JSON schema');
-        	}
-		}
+		$schemaObject = $this->toSchemaObject($schema);
 		$validator = new JsonSchema\Validator();
 		$validator->check($this->valueIsSet()->data, $schemaObject);
 
@@ -106,6 +96,28 @@ class json extends stringAsserter
 		return $this;
 	}
 
+	public function notValidates($schema)
+	{
+		$schemaObject = $this->toSchemaObject($schema);
+		$validator = new JsonSchema\Validator();
+		$validator->check($this->valueIsSet()->data, $schemaObject);
+
+		if ($validator->isValid() === false)
+		{
+			$this->pass();
+		}
+		else
+		{
+			$violations = $validator->getErrors();
+			$count = sizeof($violations);
+			$message = $this->getLocale()->_('JSON validates schema but it shouldn\'t');
+
+			$this->fail($message);
+		}
+
+		return $this;
+	}
+
 	protected function valueIsSet($message = 'JSON is undefined')
 	{
 		return parent::valueIsSet($message);
@@ -119,5 +131,20 @@ class json extends stringAsserter
 			error_get_last() === null &&
 			($decoded !== null || strtolower(trim($value)) === 'null')
 		);
+	}
+
+	private function toSchemaObject($schema)
+	{
+		$schemaStorage = new JsonSchema\SchemaStorage();
+        if (is_file($schema) === true) {
+			$schemaObject = $schemaStorage->resolveRef($schema);
+        } else {
+			$schemaObject = @json_decode($schema);
+            if ($schemaObject === null) {
+                throw new exceptions\logic\invalidArgument('Invalid JSON schema');
+            }
+		}
+
+		return $schemaObject;
 	}
 }
