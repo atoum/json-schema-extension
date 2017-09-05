@@ -112,4 +112,45 @@ class json extends atoum\test
 	{
 		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/noarray.pp'));
 	}
+
+
+	public function testnotValidates()
+	{
+		$this
+			->given(
+				$test = $this,
+				$string = $this->realdom->regex('/[a-z]+/')
+			)
+			->if($asserter = new testedClass())
+			->then
+				->exception(function() use ($asserter, $test, $string) {
+						$asserter->notValidates($test->sample($string));
+					}
+				)
+					->isInstanceOf('mageekguy\atoum\exceptions\logic\invalidArgument')
+					->hasMessage('Invalid JSON schema')
+				->exception(function() use ($asserter) {
+						$asserter->validates('{"title": "test", "type": "array"}');
+					}
+				)
+					->isInstanceOf('mageekguy\atoum\exceptions\logic')
+					->hasMessage('JSON is undefined')
+		;
+	}
+
+	public function testnotValidatesJsonObjectGrammar($json)
+	{
+		$this
+			->assert($json)
+			->if($asserter = new testedClass())
+			->then
+				->object($asserter->setWith($json))->isIdenticalTo($asserter)
+				->object($asserter->notValidates('{"title": "test", "type": "object"}'))->isIdenticalTo($asserter)
+		;
+	}
+
+	protected function testnotValidatesJsonObjectGrammarDataProvider()
+	{
+		return $this->sampleMany($this->realdom->grammar(__DIR__ . '/../../../resources/json/array.pp'));
+	}
 }
