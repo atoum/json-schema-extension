@@ -1,4 +1,4 @@
-# dev-master
+# 2.1.0 - 2017-09-25
 
 * Add Add notValidates to json asserter ([@shouze])
 * Fix assertions not reported ([@shouze])
