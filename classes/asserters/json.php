@@ -3,10 +3,8 @@
 namespace mageekguy\atoum\jsonSchema\asserters;
 
 use JsonSchema;
-use JsonSchema\Exception;
 use mageekguy\atoum\asserters;
 use mageekguy\atoum\exceptions;
-use mageekguy\atoum\jsonSchema\retriever;
 
 if (class_exists('mageekguy\atoum\asserters\phpString'))
 {
@@ -41,9 +39,9 @@ class json extends stringAsserter
 		return call_user_func_array(array($this->valueIsSet()->innerAsserter, $method), $arguments);
 	}
 
-	public function setWith($value, $label = null, $charlist = null, $checkType = true)
+	public function setWith($value, $charlist = null, $checkType = true)
 	{
-		parent::setWith($value, $label, $charlist, $checkType);
+		parent::setWith($value, $charlist, $checkType);
 
 		if (self::isJson($value) === false)
 		{
@@ -73,35 +71,9 @@ class json extends stringAsserter
 
 	public function validates($schema)
 	{
-		$schemaIsFile = true;
-		$referencesRoot = null;
-		$retriever = new JsonSchema\Uri\UriRetriever();
-
-		if (is_file($schema) === false)
-		{
-
-			$retriever->setUriRetriever(new retriever($schema));
-			$schemaIsFile = false;
-			$schema = @json_decode($schema);
-		}
-		else
-		{
-			$referencesRoot = dirname($schema);
-			$schema = $retriever->retrieve($schema);
-		}
-
-		if ($schema === null) {
-			throw new exceptions\logic\invalidArgument('Invalid JSON schema');
-		}
-
-		if ($schemaIsFile === true)
-		{
-			$resolver = new JsonSchema\JsonStorage($retriever);
-			$resolver->resolve($schema, 'file://' . $referencesRoot);
-		}
-
+		$schemaObject = $this->toSchemaObject($schema);
 		$validator = new JsonSchema\Validator();
-		$validator->check($this->valueIsSet()->data, $schema);
+		$validator->check($this->valueIsSet()->data, $schemaObject);
 
 		if ($validator->isValid() === true)
 		{
@@ -124,6 +96,27 @@ class json extends stringAsserter
 		return $this;
 	}
 
+	public function notValidates($schema)
+	{
+		$schemaObject = $this->toSchemaObject($schema);
+		$validator = new JsonSchema\Validator();
+		$validator->check($this->valueIsSet()->data, $schemaObject);
+
+		if ($validator->isValid() === false)
+		{
+			$this->pass();
+		}
+		else
+		{
+			$violations = $validator->getErrors();
+			$count = sizeof($violations);
+			$message = $this->getLocale()->_('JSON validates schema but it shouldn\'t');
+
+			$this->fail($message);
+		}
+
+		return $this;
+	}
 
 	protected function valueIsSet($message = 'JSON is undefined')
 	{
@@ -138,5 +131,20 @@ class json extends stringAsserter
 			error_get_last() === null &&
 			($decoded !== null || strtolower(trim($value)) === 'null')
 		);
+	}
+
+	private function toSchemaObject($schema)
+	{
+		$schemaStorage = new JsonSchema\SchemaStorage();
+        if (is_file($schema) === true) {
+			$schemaObject = $schemaStorage->resolveRef($schema);
+        } else {
+			$schemaObject = @json_decode($schema);
+            if ($schemaObject === null) {
+                throw new exceptions\logic\invalidArgument('Invalid JSON schema');
+            }
+		}
+
+		return $schemaObject;
 	}
 }

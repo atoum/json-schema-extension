@@ -55,6 +55,7 @@ class extension extends atoum\test
 				->mock($manager)
 					->call('setHandler')->withArguments('json')->once()
 				->object($faker = $test->json('{}'))->isInstanceOf('mageekguy\atoum\jsonSchema\asserters\json')
+				->object($faker->getTest())->isEqualTo($test)
 		;
 	}
 }

@@ -1,5 +1,11 @@
 # dev-master
 
+* Add Add notValidates to json asserter ([@shouze])
+* Fix assertions not reported ([@shouze])
+* Fix asserter setWith signature ([@shouze])
+* Fix bad JsonStorage class usage ([@shouze])
+* Use dist trusty on ci ([@shouze])
+
 # 2.0 - 2017-08-30
 
 * Use atoum 3.0, update dependencies, and test against PHP 7.1 ([@shouze])
